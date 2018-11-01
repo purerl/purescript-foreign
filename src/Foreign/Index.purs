@@ -55,7 +55,7 @@ foreign import unsafeHasOwnProperty :: forall k. Fn2 k Foreign Boolean
 hasOwnPropertyImpl :: forall k. k -> Foreign -> Boolean
 hasOwnPropertyImpl _ value | isNull value = false
 hasOwnPropertyImpl _ value | isUndefined value = false
-hasOwnPropertyImpl p value | typeOf value == "object" || typeOf value == "function" = runFn2 unsafeHasOwnProperty p value
+hasOwnPropertyImpl p value | typeOf value == "object" || typeOf value == "function" || typeOf value == "map" = runFn2 unsafeHasOwnProperty p value
 hasOwnPropertyImpl _ value = false
 
 foreign import unsafeHasProperty :: forall k. Fn2 k Foreign Boolean
@@ -63,7 +63,7 @@ foreign import unsafeHasProperty :: forall k. Fn2 k Foreign Boolean
 hasPropertyImpl :: forall k. k -> Foreign -> Boolean
 hasPropertyImpl _ value | isNull value = false
 hasPropertyImpl _ value | isUndefined value = false
-hasPropertyImpl p value | typeOf value == "object" || typeOf value == "function" = runFn2 unsafeHasProperty p value
+hasPropertyImpl p value | typeOf value == "object" || typeOf value == "function"|| typeOf value == "map" = runFn2 unsafeHasProperty p value
 hasPropertyImpl _ value = false
 
 instance indexString :: Index String where

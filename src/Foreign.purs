@@ -32,11 +32,10 @@ import Prelude
 import Control.Monad.Except (Except, throwError, mapExcept)
 
 import Data.Either (Either(..), either)
-import Data.Int as Int
 import Data.List.NonEmpty (NonEmptyList)
 import Data.List.NonEmpty as NEL
 import Data.Maybe (Maybe(..), maybe)
-import Data.String.CodeUnits (toChar)
+import Data.Char (fromCharCode)
 
 -- | A type for _foreign data_.
 -- |
@@ -119,29 +118,26 @@ foreign import isArray :: Foreign -> Boolean
 
 -- | Attempt to coerce a foreign value to a `String`.
 readString :: Foreign -> F String
-readString = unsafeReadTagged "String"
+readString = unsafeReadTagged "binary"
 
 -- | Attempt to coerce a foreign value to a `Char`.
 readChar :: Foreign -> F Char
-readChar value = mapExcept (either (const error) fromString) (readString value)
+readChar value = mapExcept (either (const error) fromInt) (readInt value)
   where
-  fromString = maybe error pure <<< toChar
+  fromInt = maybe error pure <<< fromCharCode
   error = Left $ NEL.singleton $ TypeMismatch "Char" (tagOf value)
 
 -- | Attempt to coerce a foreign value to a `Boolean`.
 readBoolean :: Foreign -> F Boolean
-readBoolean = unsafeReadTagged "Boolean"
+readBoolean = unsafeReadTagged "boolean"
 
 -- | Attempt to coerce a foreign value to a `Number`.
 readNumber :: Foreign -> F Number
-readNumber = unsafeReadTagged "Number"
+readNumber = unsafeReadTagged "float"
 
 -- | Attempt to coerce a foreign value to an `Int`.
 readInt :: Foreign -> F Int
-readInt value = mapExcept (either (const error) fromNumber) (readNumber value)
-  where
-  fromNumber = maybe error pure <<< Int.fromNumber
-  error = Left $ NEL.singleton $ TypeMismatch "Int" (tagOf value)
+readInt = unsafeReadTagged "integer"
 
 -- | Attempt to coerce a foreign value to an array.
 readArray :: Foreign -> F (Array Foreign)
