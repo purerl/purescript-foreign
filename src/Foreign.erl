@@ -1,9 +1,5 @@
 -module(foreign@foreign).
--export([unsafeToForeign/1, unsafeFromForeign/1, typeOf/1, tagOf/1, isNull/1, isUndefined/1, isArray/1]).
-
-unsafeToForeign(X) -> X.
-
-unsafeFromForeign(X) -> X.
+-export([typeOf/1, tagOf/1, isNull/1, isUndefined/1, isArray/1]).
 
 typeOf(X) when is_integer(X) -> <<"integer">>;
 typeOf(X) when is_float(X) -> <<"float">>;
@@ -15,7 +11,7 @@ typeOf(X) when is_list(X) -> <<"list">>;
 typeOf(X) when is_map(X) -> <<"map">>;
 typeOf(X) when is_tuple(X) -> <<"tuple">>;
 typeOf(X) when is_pid(X) -> <<"pid">>;
-typeOf(X) -> <<"term">>.
+typeOf(_) -> <<"term">>.
 
 tagOf(X) -> typeOf(X).
 
