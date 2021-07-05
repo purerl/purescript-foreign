@@ -4,7 +4,7 @@
 % There is no "object". Let's work for maps (typeOf is "map")
 unsafeReadPropImpl() ->
     fun (_F, S, Key, Value) when is_map(Value) ->
-            S(maps:get(Key, Value, undefined));
+            S(maps:get(Key, Value, maps:get(binary_to_atom(Key, utf8), Value, undefined)));
         (F, _S, _Key, _Value) ->
             F
     end.
